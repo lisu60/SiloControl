@@ -1,8 +1,7 @@
-from flask import Flask
 from flask_restful import Resource, Api, reqparse
+from Models import Device, db
+from app import app
 
-
-app = Flask(__name__)
 api = Api(app)
 
 
@@ -13,10 +12,10 @@ class Report(Resource):
 
     def post(self):
         args = self.parser.parse_args()
-        print("ID: %s" % args["id"])
-        print("State: ")
-        print(args["state"])
-        return 200
+        dev = Device(name=args["id"])
+        db.session.merge(dev)
+        db.session.commit()
+        return
 
 
 api.add_resource(Report, '/report')
